@@ -12,7 +12,16 @@ URL_RESULT = 'http://sou.zhaopin.com/jobs/searchresult.ashx'
 KEY_KEYWORD = 'kw'
 
 # 2.地域范围
-KEY_ADDRESS = 'jl'
+KEY_AREA = 'jl'
 
 # 3.页码
 KYE_PAGENUM = 'p'
+
+# 关键字
+VALUE_KEYWORD = 'Java'
+
+# 范围
+VALUE_AREA = '全国'
+
+# 页数限制
+PAGE_LIMIT = 100
