@@ -8,31 +8,67 @@ Created on:18-2-12 19:48
 import re
 import requests
 import gevent
+import sqlalchemy
 from bs4 import BeautifulSoup
 
 from spider import settings
 
 
+# 职位信息
+class JobItem:
+	def __init__(self, job_name, job_corporation, job_monthly_salary, job_work_place, job_release_date, job_category,
+	             job_work_experience, job_minimum_education_requirements, job_recruiting_numbers, job_job_category):
+		# 标题
+		self.name = job_name
+		# 公司
+		self.corporation = job_corporation
+		# 月薪
+		self.monthly_salary = job_monthly_salary
+		# 工作地点
+		self.work_place = job_work_place
+		# 发布日期
+		self.release_date = job_release_date
+		# 工作性质
+		self.job_category = job_category
+		# 工作经验
+		self.work_experience = job_work_experience
+		# 最低学历
+		self.min_edu_requirements = job_minimum_education_requirements
+		# 招聘人数
+		self.recruiting_number = job_recruiting_numbers
+		# 职位类别
+		self.category = job_job_category
+
+
+# 详情收集器
 class GetDetailInfo:
 	def __init__(self, urls):
 		self.urls = urls
-		pass
 
-	def get_detail_info(self, urls):
-		works = [gevent.spawn(self.get_detail_info_page, i) for i in urls]
+	def get_detail_info(self):
+		works = [gevent.spawn(self.get_detail_info_page, i) for i in self.urls]
 		gevent.joinall(works)
-		pass
 
 	def get_detail_info_page(self, url):
-		pass
-
-
-class UrlRepository:
-	def __init__(self):
-		self.urls = []
-
-	def push(self, url):
-		self.urls.append(url)
+		response = requests.get(url)
+		content = response.content
+		soup = BeautifulSoup(content, 'lxml')
+		job_name = soup.find('h1').get_text()
+		job_organization = soup.select('h2 > a')[0].get_text()
+		job_details = soup.select('div.terminalpage-left > ul > li > strong')
+		job_monthly_salary = job_details[0].get_text()
+		job_work_place = job_details[1].get_text()
+		job_release_date = job_details[2].get_text()
+		job_category = job_details[3].get_text()
+		job_work_experience = job_details[4].get_text()
+		job_minimum_education_requirements = job_details[5].get_text()
+		job_recruiting_numbers = job_details[6].get_text()
+		job_job_category = job_details[7].get_text()
+		job_item = JobItem(job_name=job_name, job_corporation=job_organization, job_monthly_salary=job_monthly_salary,
+		                   job_work_place=job_work_place, job_release_date=job_release_date, job_category=job_category,
+		                   job_work_experience=job_work_experience,
+		                   job_minimum_education_requirements=job_minimum_education_requirements,
+		                   job_recruiting_numbers=job_recruiting_numbers, job_job_category=job_job_category)
 
 
 # 详细信息 URL 采集
@@ -86,6 +122,16 @@ class GetResultUrls:
 		return url_result
 
 
+# URL 仓库
+class UrlRepository:
+	def __init__(self):
+		self.urls = []
+
+	def push(self, url):
+		self.urls.append(url)
+
+
+# 主类
 class SpiderMain:
 	def __init__(self):
 		self.url_result = []
@@ -96,6 +142,7 @@ class SpiderMain:
 		self.url_result = url_collector.get_detail_urls()
 		print(self.url_result)
 		collector = GetDetailInfo(self.url_result)
+		collector.get_detail_info()
 
 
 if __name__ == '__main__':
