@@ -8,7 +8,7 @@ Created on:18-2-12 19:48
 import re
 import requests
 import gevent
-from sqlalchemy import Column, String, Integer, create_engine
+from sqlalchemy import Column, String, Text, Integer, create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from bs4 import BeautifulSoup
@@ -38,7 +38,7 @@ class JobItemInfo(DB_Base.Base):
 	MIN_EDU_REQUIREMENTS = Column(String(200))
 	RECRUITING_NUMBER = Column(String(200))
 	JOB_CATEGORY = Column(String(200))
-	JOB_DETAIL = Column(String(1500))
+	JOB_DETAIL = Column(Text(5000))
 
 
 # 详情收集器
@@ -65,7 +65,10 @@ class GetDetailInfo:
 		job_minimum_education_requirements = job_details[5].get_text()
 		job_recruiting_numbers = job_details[6].get_text()
 		job_job_category = job_details[7].get_text()
-		job_detail = soup.select('div.tab-cont-box > div.tab-inner-cont > p')[0].get_text()
+		job_detail = ''
+		job_detail_list = soup.select('div.tab-cont-box > div.tab-inner-cont > p')
+		for i in job_detail_list:
+			job_detail += i.get_text()
 		job_item = JobItemInfo(ID=None,
 		                       TITLE=job_name, CORPORATION=job_organization,
 		                       SALARY=job_monthly_salary,
