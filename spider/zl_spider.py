@@ -28,16 +28,16 @@ class JobItemInfo(DB_Base.Base):
 	__tablename__ = 'JOB_ITEM_INFO_' + settings.VALUE_KEYWORD
 
 	ID = Column(Integer, primary_key=True)
-	TITLE = Column(String(50))
-	CORPORATION = Column(String(100))
-	SALARY = Column(String(50))
-	WORK_PLACE = Column(String(50))
-	RELEASE_DATE = Column(String(50))
-	CATEGORY = Column(String(50))
-	EXPERIENCE = Column(String(50))
-	MIN_EDU_REQUIREMENTS = Column(String(50))
-	RECRUITING_NUMBER = Column(String(50))
-	JOB_CATEGORY = Column(String(50))
+	TITLE = Column(String(200))
+	CORPORATION = Column(String(200))
+	SALARY = Column(String(200))
+	WORK_PLACE = Column(String(200))
+	RELEASE_DATE = Column(String(200))
+	CATEGORY = Column(String(200))
+	EXPERIENCE = Column(String(200))
+	MIN_EDU_REQUIREMENTS = Column(String(200))
+	RECRUITING_NUMBER = Column(String(200))
+	JOB_CATEGORY = Column(String(200))
 	JOB_DETAIL = Column(String(1500))
 
 
