@@ -13,6 +13,20 @@ from bs4 import BeautifulSoup
 from spider import settings
 
 
+class GetDetailInfo:
+	def __init__(self, urls):
+		self.urls = urls
+		pass
+
+	def get_detail_info(self, urls):
+		works = [gevent.spawn(self.get_detail_info_page, i) for i in urls]
+		gevent.joinall(works)
+		pass
+
+	def get_detail_info_page(self, url):
+		pass
+
+
 class UrlRepository:
 	def __init__(self):
 		self.urls = []
@@ -29,6 +43,7 @@ class GetResultUrls:
 		self.url_search = settings.URL_RESULT
 		self.page_maximum = 0
 
+	# 获取指定搜索条件的所有详情页链接
 	def get_detail_urls(self):
 		data = {
 			settings.KEY_KEYWORD: settings.VALUE_KEYWORD,
@@ -80,6 +95,7 @@ class SpiderMain:
 		url_collector = GetResultUrls()
 		self.url_result = url_collector.get_detail_urls()
 		print(self.url_result)
+		collector = GetDetailInfo(self.url_result)
 
 
 if __name__ == '__main__':

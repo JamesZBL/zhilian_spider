@@ -24,4 +24,4 @@ VALUE_KEYWORD = 'Java'
 VALUE_AREA = '全国'
 
 # 页数限制
-PAGE_LIMIT = 100
+PAGE_LIMIT = 1
