@@ -25,7 +25,7 @@ class DB_Base:
 
 
 class JobItemInfo(DB_Base.Base):
-	__tablename__ = 'JOB_ITEM_INFO'
+	__tablename__ = 'JOB_ITEM_INFO_' + settings.VALUE_KEYWORD
 
 	ID = Column(Integer, primary_key=True)
 	TITLE = Column(String(50))
@@ -75,6 +75,7 @@ class GetDetailInfo:
 		                       MIN_EDU_REQUIREMENTS=job_minimum_education_requirements,
 		                       RECRUITING_NUMBER=job_recruiting_numbers, JOB_CATEGORY=job_job_category,
 		                       JOB_DETAIL=job_detail)
+
 		session = DB_Base.DB_SESSION
 		session.add(job_item)
 		session.commit()
@@ -147,6 +148,7 @@ class SpiderMain:
 		self.url_search = settings.URL_RESULT
 
 	def run(self):
+		JobItemInfo.metadata.create_all(DB_Base.DBEngine)
 		url_collector = GetResultUrls()
 		self.url_result = url_collector.get_detail_urls()
 		print(self.url_result)
