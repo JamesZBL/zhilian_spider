@@ -8,36 +8,37 @@ Created on:18-2-12 19:48
 import re
 import requests
 import gevent
-import sqlalchemy
+from sqlalchemy import Column, String, Integer, create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 from bs4 import BeautifulSoup
 
 from spider import settings
 
 
-# 职位信息
-class JobItem:
-	def __init__(self, job_name, job_corporation, job_monthly_salary, job_work_place, job_release_date, job_category,
-	             job_work_experience, job_minimum_education_requirements, job_recruiting_numbers, job_job_category):
-		# 标题
-		self.name = job_name
-		# 公司
-		self.corporation = job_corporation
-		# 月薪
-		self.monthly_salary = job_monthly_salary
-		# 工作地点
-		self.work_place = job_work_place
-		# 发布日期
-		self.release_date = job_release_date
-		# 工作性质
-		self.job_category = job_category
-		# 工作经验
-		self.work_experience = job_work_experience
-		# 最低学历
-		self.min_edu_requirements = job_minimum_education_requirements
-		# 招聘人数
-		self.recruiting_number = job_recruiting_numbers
-		# 职位类别
-		self.category = job_job_category
+class DB_Base:
+	Base = declarative_base()
+	DBEngine = create_engine('mysql://root:root@localhost:3306/zhilian?charset=utf8', echo=True)
+	DBSession = sessionmaker(bind=DBEngine)
+
+	DB_SESSION = DBSession()
+
+
+class JobItemInfo(DB_Base.Base):
+	__tablename__ = 'JOB_ITEM_INFO'
+
+	ID = Column(Integer, primary_key=True)
+	TITLE = Column(String(50))
+	CORPORATION = Column(String(50))
+	SALARY = Column(String(50))
+	WORK_PLACE = Column(String(50))
+	RELEASE_DATE = Column(String(50))
+	CATEGORY = Column(String(50))
+	EXPERIENCE = Column(String(50))
+	MIN_EDU_REQUIREMENTS = Column(String(50))
+	RECRUITING_NUMBER = Column(String(50))
+	JOB_CATEGORY = Column(String(50))
+	JOB_DETAIL = Column(String(1500))
 
 
 # 详情收集器
@@ -64,11 +65,19 @@ class GetDetailInfo:
 		job_minimum_education_requirements = job_details[5].get_text()
 		job_recruiting_numbers = job_details[6].get_text()
 		job_job_category = job_details[7].get_text()
-		job_item = JobItem(job_name=job_name, job_corporation=job_organization, job_monthly_salary=job_monthly_salary,
-		                   job_work_place=job_work_place, job_release_date=job_release_date, job_category=job_category,
-		                   job_work_experience=job_work_experience,
-		                   job_minimum_education_requirements=job_minimum_education_requirements,
-		                   job_recruiting_numbers=job_recruiting_numbers, job_job_category=job_job_category)
+		job_detail = soup.select('div.tab-cont-box > div.tab-inner-cont > p')[0].get_text()
+		job_item = JobItemInfo(ID=None,
+		                       TITLE=job_name, CORPORATION=job_organization,
+		                       SALARY=job_monthly_salary,
+		                       WORK_PLACE=job_work_place, RELEASE_DATE=job_release_date,
+		                       CATEGORY=job_category,
+		                       EXPERIENCE=job_work_experience,
+		                       MIN_EDU_REQUIREMENTS=job_minimum_education_requirements,
+		                       RECRUITING_NUMBER=job_recruiting_numbers, JOB_CATEGORY=job_job_category,
+		                       JOB_DETAIL=job_detail)
+		session = DB_Base.DB_SESSION
+		session.add(job_item)
+		session.commit()
 
 
 # 详细信息 URL 采集
