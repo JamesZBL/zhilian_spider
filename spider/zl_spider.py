@@ -29,7 +29,7 @@ class JobItemInfo(DB_Base.Base):
 
 	ID = Column(Integer, primary_key=True)
 	TITLE = Column(String(50))
-	CORPORATION = Column(String(50))
+	CORPORATION = Column(String(100))
 	SALARY = Column(String(50))
 	WORK_PLACE = Column(String(50))
 	RELEASE_DATE = Column(String(50))
@@ -123,8 +123,8 @@ class GetResultUrls:
 			if href.find('.do') > -1:
 				continue
 			# 过滤关键字
-			if text.lower().find(settings.VALUE_KEYWORD.lower()) == -1:
-				continue
+			# if text.lower().find(settings.VALUE_KEYWORD.lower()) == -1:
+			# 	continue
 			print(text)
 			print(href)
 			url_result.append(href)
