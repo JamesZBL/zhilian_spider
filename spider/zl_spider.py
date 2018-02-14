@@ -7,12 +7,12 @@ Created on:18-2-12 19:48
 """
 import winsound
 import re
-import requests
+import requests as rq
 import gevent
 from sqlalchemy import Column, String, Text, Integer, create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as BS
 
 from spider import settings
 
@@ -52,9 +52,9 @@ class GetDetailInfo:
 		gevent.joinall(works)
 
 	def get_detail_info_page(self, url):
-		response = requests.get(url)
+		response = rq.get(url)
 		content = response.content
-		soup = BeautifulSoup(content, 'lxml')
+		soup = BS(content, 'lxml')
 		job_name = soup.find('h1').get_text()
 		job_organization = soup.select('h2 > a')[0].get_text()
 		job_details = soup.select('div.terminalpage-left > ul > li > strong')
@@ -100,9 +100,9 @@ class GetResultUrls:
 			settings.KEY_KEYWORD: settings.VALUE_KEYWORD,
 			settings.KEY_AREA: settings.VALUE_AREA,
 		}
-		response = requests.get(self.url_search, params=data)
+		response = rq.get(self.url_search, params=data)
 		content = response.content
-		soup = BeautifulSoup(content, 'lxml')
+		soup = BS(content, 'lxml')
 		try:
 			result_count = int(re.findall(r"共<em>(.*?)</em>个职位满足条件", str(soup))[0])
 		except IndexError:
@@ -122,9 +122,9 @@ class GetResultUrls:
 			settings.KEY_AREA: settings.VALUE_AREA,
 			settings.KYE_PAGENUM: page_number
 		}
-		response = requests.get(self.url_search, params=data)
+		response = rq.get(self.url_search, params=data)
 		content = response.content
-		soup = BeautifulSoup(content, 'lxml')
+		soup = BS(content, 'lxml')
 		detail_links = soup.select("table.newlist > tr > td.zwmc > div > a")
 		for link in detail_links:
 			href = link['href']
