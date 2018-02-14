@@ -18,13 +18,13 @@ KEY_AREA = 'jl'
 KYE_PAGENUM = 'p'
 
 # 关键字
-VALUE_KEYWORD = 'PHP'
+VALUE_KEYWORD = 'C++'
 
 # 范围
 VALUE_AREA = '全国'
 
 # 页数限制
-PAGE_LIMIT = True
+PAGE_LIMIT = False
 
 # 最大页数
 PAGE_LIMIT_NUM = 1

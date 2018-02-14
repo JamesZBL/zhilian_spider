@@ -103,7 +103,10 @@ class GetResultUrls:
 		response = requests.get(self.url_search, params=data)
 		content = response.content
 		soup = BeautifulSoup(content, 'lxml')
-		result_count = int(re.findall(r"共<em>(.*?)</em>个职位满足条件", str(soup))[0])
+		try:
+			result_count = int(re.findall(r"共<em>(.*?)</em>个职位满足条件", str(soup))[0])
+		except IndexError:
+			result_count = 10000
 		self.page_maximum = result_count // 60
 		if not self.page_limit_on:
 			self.page_limit = self.page_maximum
