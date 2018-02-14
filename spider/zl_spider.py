@@ -5,6 +5,7 @@
 @author:James
 Created on:18-2-12 19:48
 """
+import winsound
 import re
 import requests
 import gevent
@@ -88,7 +89,8 @@ class GetDetailInfo:
 class GetResultUrls:
 	def __init__(self):
 		self.url_repository = UrlRepository()
-		self.page_limit = settings.PAGE_LIMIT
+		self.page_limit = settings.PAGE_LIMIT_NUM
+		self.page_limit_on = settings.PAGE_LIMIT
 		self.url_search = settings.URL_RESULT
 		self.page_maximum = 0
 
@@ -103,6 +105,8 @@ class GetResultUrls:
 		soup = BeautifulSoup(content, 'lxml')
 		result_count = int(re.findall(r"共<em>(.*?)</em>个职位满足条件", str(soup))[0])
 		self.page_maximum = result_count // 60
+		if not self.page_limit_on:
+			self.page_limit = self.page_maximum
 		works = [gevent.spawn(self.get_detail_urls_page, i) for i in range(self.page_limit)]
 		gevent.joinall(works, timeout=10)
 		return self.url_repository.urls
@@ -157,6 +161,7 @@ class SpiderMain:
 		print(self.url_result)
 		collector = GetDetailInfo(self.url_result)
 		collector.get_detail_info()
+		winsound.PlaySound("SystemExclamation", winsound.SND_ALIAS)
 
 
 if __name__ == '__main__':
