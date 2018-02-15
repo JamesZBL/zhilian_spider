@@ -137,12 +137,15 @@ class GetResultUrls:
 		response = rq.get(self.url_search, params=data)
 		content = response.content
 		soup = BS(content, 'lxml')
-		detail_links = soup.select("table.newlist > tr > td.zwmc > div > a")
+		detail_links = soup.select("div.newlist_list_content > table.newlist > tr > td.zwmc > div > a")
 		for link in detail_links:
 			href = link['href']
 			text = link.getText()
 			# 筛选出详情链接
 			if href.find('.do') > -1:
+				continue
+			# 筛选广告
+			if href.find('xiaoyuan') > -1:
 				continue
 			# 过滤关键字
 			# if text.lower().find(settings.VALUE_KEYWORD.lower()) == -1:
