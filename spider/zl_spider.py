@@ -28,17 +28,29 @@ class DB_Base:
 class JobItemInfo(DB_Base.Base):
 	__tablename__ = 'JOB_ITEM_INFO_' + settings.VALUE_KEYWORD
 
+	# 主键
 	ID = Column(Integer, primary_key=True)
+	# 职位发布标题
 	TITLE = Column(String(200))
+	# 公司
 	CORPORATION = Column(String(200))
+	# 月薪
 	SALARY = Column(String(200))
+	# 工作地点
 	WORK_PLACE = Column(String(200))
+	# 发布日期
 	RELEASE_DATE = Column(String(200))
+	# 工作性质
 	CATEGORY = Column(String(200))
+	# 工作经历
 	EXPERIENCE = Column(String(200))
+	# 最低学历
 	MIN_EDU_REQUIREMENTS = Column(String(200))
+	# 招聘人数
 	RECRUITING_NUMBER = Column(String(200))
+	# 岗位类别
 	JOB_CATEGORY = Column(String(200))
+	# 详细描述
 	JOB_DETAIL = Column(Text(5000))
 
 
