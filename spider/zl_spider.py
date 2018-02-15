@@ -66,6 +66,7 @@ class GetDetailInfo:
 	def get_detail_info_page(self, url):
 		response = rq.get(url)
 		content = response.content
+		print (response.url)
 		soup = BS(content, 'lxml')
 		try:
 			job_name = soup.find('h1').get_text()
@@ -100,7 +101,7 @@ class GetDetailInfo:
 			session.add(job_item)
 			session.commit()
 		except Exception:
-			pass
+			session.rollback()
 
 
 # 详细信息 URL 采集
