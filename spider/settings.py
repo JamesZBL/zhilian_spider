@@ -18,7 +18,7 @@ KEY_AREA = 'jl'
 KYE_PAGENUM = 'p'
 
 # 关键字
-VALUE_KEYWORD = '前端'
+VALUE_KEYWORD = '算法'
 
 # 范围
 VALUE_AREA = '全国'
@@ -27,4 +27,4 @@ VALUE_AREA = '全国'
 PAGE_LIMIT = False
 
 # 最大页数
-PAGE_LIMIT_NUM = 50
+PAGE_LIMIT_NUM = 1
