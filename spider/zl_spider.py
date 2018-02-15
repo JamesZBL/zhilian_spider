@@ -177,8 +177,3 @@ class SpiderMain:
 		collector = GetDetailInfo(self.url_result)
 		collector.get_detail_info()
 		winsound.PlaySound("SystemExclamation", winsound.SND_ALIAS)
-
-
-if __name__ == '__main__':
-	app = SpiderMain()
-	app.run()
