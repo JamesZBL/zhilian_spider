@@ -67,7 +67,10 @@ class GetDetailInfo:
 		response = rq.get(url)
 		content = response.content
 		soup = BS(content, 'lxml')
-		job_name = soup.find('h1').get_text()
+		try:
+			job_name = soup.find('h1').get_text()
+		except Exception:
+			return 0  
 		job_organization = soup.select('h2 > a')[0].get_text()
 		job_details = soup.select('div.terminalpage-left > ul > li > strong')
 		job_monthly_salary = job_details[0].get_text()
