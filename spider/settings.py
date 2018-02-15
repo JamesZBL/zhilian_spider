@@ -27,4 +27,4 @@ VALUE_AREA = '全国'
 PAGE_LIMIT = False
 
 # 最大页数
-PAGE_LIMIT_NUM = 1
+PAGE_LIMIT_NUM = 50

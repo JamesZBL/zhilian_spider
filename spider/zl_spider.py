@@ -93,8 +93,11 @@ class GetDetailInfo:
 		                       JOB_DETAIL=job_detail)
 
 		session = DB_Base.DB_SESSION
-		session.add(job_item)
-		session.commit()
+		try:
+			session.add(job_item)
+			session.commit()
+		except Exception:
+			pass
 
 
 # 详细信息 URL 采集
